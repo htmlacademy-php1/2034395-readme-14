@@ -20,6 +20,13 @@ $data = [
         "authorAvatarUrl" => "userpic.jpg"
     ],
     [
+        "title" => "Testing long text",
+        "type" => "post-text",
+        "content" => "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Integer malesuada nunc vel risus commodo viverra. Amet porttitor eget dolor morbi non arcu risus quis. Ut faucibus pulvinar elementum integer enim neque volutpat ac. Eget felis eget nunc lobortis. Auctor neque vitae tempus quam pellentesque nec nam aliquam sem. Sagittis purus sit amet volutpat consequat mauris nunc congue. Blandit volutpat maecenas volutpat blandit aliquam etiam erat. Adipiscing elit duis tristique sollicitudin nibh sit amet. At erat pellentesque adipiscing commodo elit at. Non consectetur a erat nam at lectus urna. Etiam erat velit scelerisque in. Nascetur ridiculus mus mauris vitae ultricies leo integer. In massa tempor nec feugiat nisl. Id semper risus in hendrerit gravida rutrum quisque non tellus. Sit amet justo donec enim diam. Ultrices tincidunt arcu non sodales neque sodales. Habitasse platea dictumst quisque sagittis purus sit amet volutpat. Ac orci phasellus egestas tellus rutrum. Enim sit amet venenatis urna cursus eget. In metus vulputate eu scelerisque felis. Tristique senectus et netus et malesuada fames. Aliquam id diam maecenas ultricies. Tortor pretium viverra suspendisse potenti nullam ac tortor. Ultrices in iaculis nunc sed. Dolor sit amet consectetur adipiscing elit ut aliquam purus. Justo laoreet sit amet cursus sit amet dictum sit amet. Tempor orci eu lobortis elementum nibh tellus. Vulputate mi sit amet mauris commodo quis imperdiet massa. Augue eget arcu dictum varius duis at consectetur lorem. Aliquam faucibus purus in massa tempor nec. Id interdum velit laoreet id donec ultrices tincidunt arcu non. Sapien eget mi proin sed libero enim. Velit euismod in pellentesque massa placerat duis ultricies lacus sed. Commodo nulla facilisi nullam vehicula ipsum a arcu. Mi tempus imperdiet nulla malesuada. At ultrices mi tempus imperdiet nulla malesuada. Nulla posuere sollicitudin aliquam ultrices sagittis orci a. Pulvinar neque laoreet suspendisse interdum consectetur libero. Faucibus purus in massa tempor nec feugiat nisl pretium fusce. Magna sit amet purus gravida quis blandit turpis.",
+        "authorName" => "Владик",
+        "authorAvatarUrl" => "userpic.jpg"
+    ],
+    [
         "title" => "Наконец, обработал фотки!",
         "type" => "post-photo",
         "content" => "rock-medium.jpg",
@@ -41,6 +48,31 @@ $data = [
         "authorAvatarUrl" => "userpic.jpg"
     ],
 ];
+
+function showData($text, $maxSymbols = 300): array
+{
+    $array = explode(' ', $text);
+    $result = [
+        'text' => null,
+        'isLong' => 0
+    ];
+
+    $symbols = 0;
+
+    foreach($array as $word) {
+        $symbols = $symbols + strlen($word);
+
+        if ($symbols < $maxSymbols) {
+            $result['text'] = $result['text'] . ' ' . $word;
+        } else {
+            $result['text'] = $result['text'] . '...';
+            $result['isLong'] = 1;
+            break;
+        }
+    }
+
+    return $result;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -257,7 +289,11 @@ $data = [
                         <?php endif; ?>
 
                         <?php if($post['type'] == 'post-text'): ?>
-                            <p><?= htmlspecialchars($post['content']) ?></p>
+                            <?php $postTextData = showData($post['content']) ?>
+                            <p><?= htmlspecialchars($postTextData['text']) ?></p>
+                            <?php if($postTextData['isLong']): ?>
+                                <a class="post-text__more-link" href="#">Читать далее</a>
+                            <?php endif; ?>
                         <?php endif; ?>
 
                         <?php if($post['type'] == 'post-photo'): ?>
