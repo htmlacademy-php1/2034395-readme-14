@@ -2,26 +2,25 @@
 require_once 'helpers.php';
 require_once 'init.php';
 
-$data = [];
-
 if (!$link) {
     $error = mysqli_connect_error();
     print($error);
-} else {
-    // Получение списка постов
-    $sql = 'SELECT * FROM posts p'
-        .   ' JOIN users u ON p.author = u.id'
-        .   ' JOIN content_types ct ON p.content_type = ct.id'
-        .   ' ORDER BY views DESC';
-    $result = mysqli_query($link, $sql);
-
-    if ($result === false) {
-        print_r("Ошибка выполнения запроса: " . mysqli_error($link));
-        die();
-    }
-
-    $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    die();
 }
+
+// Получение списка постов
+$sql = 'SELECT * FROM posts p'
+    .   ' JOIN users u ON p.author = u.id'
+    .   ' JOIN content_types ct ON p.content_type = ct.id'
+    .   ' ORDER BY views DESC';
+$result = mysqli_query($link, $sql);
+
+if ($result === false) {
+    print_r("Ошибка выполнения запроса: " . mysqli_error($link));
+    die();
+}
+
+$data = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 $is_auth = rand(0, 1);
 
