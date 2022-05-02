@@ -485,11 +485,11 @@
                                         </div>
                                     </div>
                                     <div class="adding-post__textarea-wrapper form__input-wrapper">
-                                        <label class="adding-post__label form__label" for="link-site">Ссылка <span
+                                        <label class="adding-post__label form__label" for="link-url">Ссылка <span
                                                 class="form__input-required">*</span></label>
                                         <div class="form__input-section">
-                                            <input class="adding-post__input form__input" id="link-site" type="text"
-                                                   name="link-site" placeholder="Введите ссылку">
+                                            <input class="adding-post__input form__input" id="link-url" type="text"
+                                                   name="link-url" placeholder="Введите ссылку">
                                             <button class="form__error-button button" type="button">!<span
                                                     class="visually-hidden">Информация об ошибке</span></button>
                                             <div class="form__error-text">
@@ -549,7 +549,7 @@
             <h1 class="modal__title">Пост добавлен</h1>
             <p class="modal__desc">
                 Озеро Байкал – огромное древнее озеро в горах Сибири к северу от монгольской границы. Байкал считается
-                самым глубоким озером в мире. Он окружен сефтью пешеходных маршрутов, называемых Большой байкальской
+                самым глубоким озером в мире. Он окружен сетью пешеходных маршрутов, называемых Большой байкальской
                 тропой. Деревня Листвянка, расположенная на западном берегу озера, – популярная отправная точка для
                 летних экскурсий.
             </p>

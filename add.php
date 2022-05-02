@@ -45,7 +45,36 @@ function getContentTypes($link): array {
     return mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
 
-function validateData($data, $link, $type) {
+function validateUrl($url, $type): array|bool {
+    $isUrlValid = filter_var($url, FILTER_VALIDATE_URL);
+
+    if (strlen($url) == 0 || !$isUrlValid) {
+        return ['target' => 'url', 'text' => 'Укажите корректную ссылку на источник.'];
+    }
+
+    if ($type == 'video' && !check_youtube_url($url)) {
+        return ['target' => 'url', 'text' => 'Указанная в ссылке видеозапись недоступна.'];
+    }
+
+    return false;
+}
+
+function validateFile($file, $path): array|bool {
+    if (!$file['name']) return ['target' => 'file', 'text' => 'Прикрепите или укажите ссылку на изображение.'];
+
+    $mime = $file['type'];
+    $name = $file['name'];
+    $tmp_name = $file['tmp_name'];
+
+    if ($mime != 'image/gif' && $mime != 'image/jpeg' && $mime != 'image/png') {
+        return ['target' => 'file', 'text' => 'Вы можете загрузить файлы только в следующих форматах: .png, .jpeg, .gif.'];
+    }
+
+    move_uploaded_file($tmp_name, $path . $name);
+    return false;
+}
+
+function validateData($data, $link, $type): array {
     $ct = getCategoryId($link, $type);
 
     $files_path = __DIR__ . '/uploads/';
@@ -72,25 +101,8 @@ function validateData($data, $link, $type) {
 
     if (strlen($title) == 0) $errors[] = ['target' => 'title', 'text' => 'Укажите заголовок.'];
     if (strlen($title) > 70) $errors[] = ['target' => 'title', 'text' => 'Заголовок не может превышать 70 символов.'];
-
-    if (!strlen($url) == 0) {
-        $isUrlValid = filter_var($url, FILTER_VALIDATE_URL);
-
-        if (!$isUrlValid) $errors[] = ['target' => 'url', 'text' => 'Укажите корректную ссылку на источник.'];
-        else if ($type == 'video' && !check_youtube_url($url)) $errors[] = ['target' => 'url', 'text' => 'Указанная в ссылке видеозапись недоступна.'];
-    } else if ($type == 'photo') {
-        if ($file['name']) {
-            $mime = $file['type'];
-            $name = $file['name'];
-            $tmp_name = $file['tmp_name'];
-
-            if ($mime != 'image/gif' && $mime != 'image/jpeg' && $mime != 'image/png') {
-                $errors[] = ['target' => 'file', 'text' => 'Вы можете загрузить файлы только в следующих форматах: .png, .jpeg, .gif.'];
-            } else {
-                move_uploaded_file($tmp_name, $files_path . $name);
-            }
-        } else $errors[] = ['target' => 'url', 'text' => 'Прикрепите или укажите ссылку на изображение.'];
-    }
+    if ($url && validateUrl($url, $type)) $errors[] = validateUrl($url, $type);
+    if ($file && validateFile($file, $files_path)) $errors[] = validateFile($file, $files_path);
 
     return [
         "data" => [

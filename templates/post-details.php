@@ -31,7 +31,7 @@
                     <?php if ($post['name'] == 'link'): ?>
                         <div class="post__main">
                             <div class="post-link__wrapper">
-                                <a class="post-link__external" href="<?= htmlspecialchars($post['site_url']); ?>"
+                                <a class="post-link__external" target="_blank" href="<?= htmlspecialchars($post['site_url']); ?>"
                                    title="Перейти по ссылке">
                                     <div class="post-link__info-wrapper">
                                         <div class="post-link__icon-wrapper">
