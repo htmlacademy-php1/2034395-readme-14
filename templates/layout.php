@@ -1,3 +1,8 @@
+<?php
+$avatar = $user['avatar_url'] ?? 'userpic.jpg';
+
+?>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -101,7 +106,7 @@
 <header class="header">
     <div class="header__wrapper container">
         <div class="header__logo-wrapper">
-            <a class="header__logo-link" href="../index.php">
+            <a class="header__logo-link" href="../popular.php">
                 <img class="header__logo" src="../img/logo.svg" alt="Логотип readme" width="128" height="24">
             </a>
             <p class="header__topic">
@@ -144,12 +149,12 @@
                         <li class="header__profile">
                             <a class="header__profile-link" href="#">
                                 <div class="header__avatar-wrapper">
-                                    <img class="header__profile-avatar" src="../img/userpic-medium.jpg"
+                                    <img class="header__profile-avatar" src="../img/<?= $avatar ?>"
                                          alt="Аватар профиля">
                                 </div>
                                 <div class="header__profile-name">
                                         <span>
-                                            <?= htmlspecialchars($user_name); ?>
+                                            <?= htmlspecialchars($user['login']); ?>
                                         </span>
                                     <svg class="header__link-arrow" width="10" height="6">
                                         <use xlink:href="#icon-arrow-right-ad"></use>
@@ -176,7 +181,7 @@
                                         </li>
 
                                         <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
+                                            <a class="header__profile-nav-link" href="../logout.php">
                                               <span class="header__profile-nav-text">
                                                 Выход
                                               </span>
@@ -192,7 +197,7 @@
                         </li>
                     <?php else: ?>
                         <li class="header__authorization">
-                            <a class="header__user-button header__authorization-button button" href="#">Вход</a>
+                            <a class="header__user-button header__authorization-button button" href="../index.php">Вход</a>
                         </li>
                         <li>
                             <a class="header__user-button header__user-button--active header__register-button button" href="../reg.php">

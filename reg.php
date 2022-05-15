@@ -34,11 +34,11 @@ function validateData($data, $link) {
 
     $errors = [];
 
-    $login = $data['login'] ?? null;
-    $email = $data['email'] ?? null;
-    $password = $data['password'] ?? null;
-    $re_password = $data['password-repeat'] ?? null;
-    $file = $_FILES['userpic-file'] ?? null;
+    $login = $data['login'];
+    $email = $data['email'];
+    $password = $data['password'];
+    $re_password = $data['password-repeat'];
+    $file = $_FILES['userpic-file'];
 
     if (strlen($login) == 0) $errors[] = ['target' => 'login', 'text' => 'Придумайте логин.'];
     if (strlen($email) == 0) $errors[] = ['target' => 'login', 'text' => 'Укажите адрес своей электронной почты.'];
@@ -64,10 +64,7 @@ function registerUser($link, $data) {
         print($error);
         die();
     }
-
-    $sql = "INSERT INTO `users` (`email`, `login`, `password`)" .
-        " VALUES (?, ?, ?)";
-
+    $sql = "INSERT INTO `users` (`email`, `login`, `password`) VALUES (?, ?, ?)";
     $stmt = db_get_prepare_stmt($link, $sql, $data['data']);
 
     mysqli_stmt_execute($stmt);
@@ -79,6 +76,12 @@ if (count($data) > 0) {
 
     if (count($reg_data['errors']) == 0) {
         registerUser($link, $reg_data);
+
+        $now = time();
+        $expires = strtotime('+1 month', $now);
+
+        setcookie('user_email', $reg_data['data']['email'], $expires);
+        setcookie('user_password', $reg_data['data']['password'], $expires);
         header("Location: /");
         exit();
     }
@@ -88,7 +91,7 @@ $content = include_template('registration.php', ["errors" => $reg_data['errors']
 $layout = include_template('layout.php', [
     "content" => $content,
     "title" => "readme: регистрация",
-    "user_name" => "Kirill",
+    "user" => $user,
     "is_auth" => $is_auth,
 ]);
 

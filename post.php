@@ -2,6 +2,11 @@
 require_once 'helpers.php';
 require_once 'init.php';
 
+if (!$is_auth) {
+    header("Location: /");
+    exit();
+}
+
 $post_id = $_GET['id'];
 
 function normalizeViews($var): string {
@@ -86,7 +91,7 @@ $content = include_template('post-details.php', [
 $layout = include_template('layout.php', [
     "content" => $content,
     "title" => "readme: просмотр поста",
-    "user_name" => "Kirill",
+    "user" => $user,
     "is_auth" => $is_auth,
 ]);
 
