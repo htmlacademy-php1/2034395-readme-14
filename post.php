@@ -1,11 +1,6 @@
 <?php
 require_once 'requires_guest.php';
 
-if (!$is_auth) {
-    header("Location: /");
-    exit();
-}
-
 $post_id = $_GET['id'];
 
 function normalizeViews($var): string {
