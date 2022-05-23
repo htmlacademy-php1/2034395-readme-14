@@ -39,7 +39,7 @@ function validateUrl($url, $type): array|bool {
     return false;
 }
 
-function validateData($data, $link, $type): array {
+function validateData($data, $link, $type, $user): array {
     $ct = getCategoryId($link, $type);
 
     $files_path = __DIR__ . '/uploads/';
@@ -75,6 +75,7 @@ function validateData($data, $link, $type): array {
             "content" => $content,
             "cite_author" => $author,
             "content_type" => $ct,
+            "author" => $user['id'],
             "image_url" => $image_url,
             "video_url" => $video_url,
             "site_url" => $site_url,
@@ -83,7 +84,7 @@ function validateData($data, $link, $type): array {
     ];
 }
 
-function addPost($link, $post, $user_id) {
+function addPost($link, $post) {
     if (!$link) {
         $error = mysqli_connect_error();
         print($error);
@@ -91,7 +92,7 @@ function addPost($link, $post, $user_id) {
     }
 
     $sql = "INSERT INTO `posts` (`date`, `title`, `content`, `cite_author`, `content_type`, `author`, `image_url`, `video_url`, `site_url`, `views`)" .
-        " VALUES (NOW(), ?, ?, ?, ?, '$user_id', ?, ?, ?, 0)";
+        " VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, 0)";
 
     $stmt = db_get_prepare_stmt($link, $sql, $post['data']);
 
@@ -100,10 +101,10 @@ function addPost($link, $post, $user_id) {
 }
 
 if (count($data) > 0) {
-    $post_data = validateData($data, $link, $post_type);
+    $post_data = validateData($data, $link, $post_type, $user);
 
     if (count($post_data['errors']) == 0) {
-        addPost($link, $post_data, $user['id']);
+        addPost($link, $post_data);
         header("Location: /popular.php");
         exit();
     }

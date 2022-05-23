@@ -27,8 +27,8 @@ function authUser($data, $link): bool {
     $now = time();
     $expires = strtotime('+1 month', $now);
 
-    setcookie('user_email', $email, $expires);
-    setcookie('user_password', $user['password'], $expires);
+    setUserDataCookies($email, $user['password'], $expires);
+
     return true;
 }
 

@@ -33,11 +33,11 @@ function validateData($data, $link) {
 
     $errors = [];
 
-    $login = $data['login'];
-    $email = $data['email'];
-    $password = $data['password'];
-    $re_password = $data['password-repeat'];
-    $file = $_FILES['userpic-file'];
+    $login = $data['login'] ?? null;
+    $email = $data['email'] ?? null;
+    $password = $data['password'] ?? null;
+    $re_password = $data['password-repeat'] ?? null;
+    $file = $_FILES['userpic-file'] ?? null;
 
     if (strlen($login) == 0) $errors[] = ['target' => 'login', 'text' => 'Придумайте логин.'];
     if (strlen($email) == 0) $errors[] = ['target' => 'login', 'text' => 'Укажите адрес своей электронной почты.'];
@@ -79,8 +79,7 @@ if (count($data) > 0) {
         $now = time();
         $expires = strtotime('+1 month', $now);
 
-        setcookie('user_email', $reg_data['data']['email'], $expires);
-        setcookie('user_password', $reg_data['data']['password'], $expires);
+        setUserDataCookies($reg_data['data']['email'], $reg_data['data']['password'], $expires);
         header("Location: /");
         exit();
     }
